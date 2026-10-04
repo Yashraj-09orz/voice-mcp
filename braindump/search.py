@@ -92,3 +92,24 @@ def build_query(params: dict, mode: str = "all") -> tuple[str, list]:
 
     return sql,args
 #all the testing is done on seed.py information and try_search to test everything
+
+#now the real function that would search like upper one just make down teh query but this would do the search and then return the result
+#we are returning thw whole row means all the data which is corresponding to it
+def find_notes(params:dict)->list:
+    sql,args = build_query(params,"all")
+    rows = db.query_all(sql,args)
+
+    has_words = to_fts(params.get("word_groups") or []) != ""
+    if has_words and len(rows)<3:
+        sql,args = build_query(params,all)
+        more_rows = db.query_all(sql, args) #now checking the combination fo both of them
+        seen = set()
+        for row in rows:
+            seen.add(row["id"])
+        for row in more_rows:
+            if row["id"] not in seen:
+                rows.append(row)
+                seen.add(row["id"])
+    return rows
+
+
