@@ -101,7 +101,7 @@ def find_notes(params:dict)->list:
 
     has_words = to_fts(params.get("word_groups") or []) != ""
     if has_words and len(rows)<3:
-        sql,args = build_query(params,all)
+        sql,args = build_query(params,"any")
         more_rows = db.query_all(sql, args) #now checking the combination fo both of them
         seen = set()
         for row in rows:
@@ -112,4 +112,36 @@ def find_notes(params:dict)->list:
                 seen.add(row["id"])
     return rows
 
+#saving the search and also using that search again for back and back call with the ai or the host when things get messed up sometimes
+def save_search(params: dict, ids: list, shown: int) -> int:
+    """Remember a search. Returns the new search id."""
+    now = datetime.now().isoformat(timespec="seconds")     #current moment of time matters to us that when was this function called upon
+    return db.execute(
+        "INSERT INTO searches (params, ranked_ids, shown, created_at) VALUES (?, ?, ?, ?)",
+        (json.dumps(params), json.dumps(ids), shown, now),  
+    )
 
+#loading the search
+def load_search(search_id :int | None = None) -> dict | None:
+    #if no input then we can just look up to the recent searches like literally there is no search id but this cannot occur doing this only for security and safety that if at all possiblity something breaks then i would have the result with me
+    #of the last result and i can tell the user that this let me give u the last search
+    if search_id is None:
+        row = db.query_one(
+            "SELECT id,params,ranked_ids,shown FROM searches ORDER BY id DESC LIMIT 1"
+        )
+    else:
+        row = db.query_one(
+            "SELECT id, params, ranked_ids, shown FROM searches WHERE id = ?", (search_id,)
+        )
+    if row is None:
+        return None
+    #now the things which we inserted from json to text is now again tied back to list so that the host can read it naturally and perfectly and also there is no fluff going on and it can be reused again
+    return {
+        "id": row["id"],
+        "params": json.loads(row["params"]),       # text → dict
+        "ids": json.loads(row["ranked_ids"]),      # text → list
+        "shown": row["shown"],
+    }
+#how many copy of the search for this search_id is been showed
+def set_shown(search_id: int, shown: int) -> None:
+    db.execute("UPDATE searches SET shown = ? WHERE id = ?", (shown, search_id))
