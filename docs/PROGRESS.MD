@@ -38,18 +38,18 @@ take real actions on my Mac from one spoken sentence:
 
 ## Step 3 — Search: building the query
 
-- [ ] `braindump/search.py` — clean the search words (safe for FTS5)
-- [ ] Turn word groups into an FTS5 query: OR inside a group, AND between groups
-- [ ] Dynamic query building: one condition per input that is present
+- [x] `braindump/search.py` — clean the search words (safe for FTS5)
+- [x] Turn word groups into an FTS5 query: OR inside a group, AND between groups
+- [x] Dynamic query building: one condition per input that is present
       (words, folder, file, heading, session, dates), `?` + params list
-- [ ] Ranking: BM25 with words, newest first without words
-- [ ] Fallback: if fewer than 3 results, retry with any word
-- [ ] Tested in plain Python on the sample data
+- [x] Ranking: BM25 with words, newest first without words
+- [x] Fallback: if fewer than 3 results, retry with any word
+- [x] Tested in plain Python on the sample data
 
 ## Step 4 — Search: remembering searches
 
-- [ ] Save a search (inputs + ranked list of note ids) in the `searches` table
-- [ ] Load a search (by id, or the latest one)
+- [x] Save a search (inputs + ranked list of note ids) in the `searches` table
+- [x] Load a search (by id, or the latest one)
 - [ ] "More" → next 5 from the saved list
 - [ ] "Open number n" → the n-th note id from the saved list
 
