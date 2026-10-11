@@ -145,3 +145,21 @@ def load_search(search_id :int | None = None) -> dict | None:
 #how many copy of the search for this search_id is been showed
 def set_shown(search_id: int, shown: int) -> None:
     db.execute("UPDATE searches SET shown = ? WHERE id = ?", (shown, search_id))
+
+#next function is to get the new data to show to the user for the question of give more
+#structure -> input list given is of the new data to fetch out
+# write the date,folder,and snippet of it
+def fetch_cards(ids:list) -> list:
+    if not ids:
+        return []
+    placeholders = ", ".join(["?"]*len(ids))
+    sql = ("SELECT "+ SELECT_COLS + ", substr(n.text_raw, 1, 80) AS snippet FROM notes n " + JOINS + " WHERE n.id IN (" + placeholders +") ")
+    rows = db.query_all(sql,ids)
+    by_id = {}
+    for row in rows:
+        by_id[row["id"]] = row
+    ordered = []
+    for id in ids:
+        if id in by_id:
+            ordered.append(by_id[id])
+    return ordered
