@@ -62,9 +62,9 @@ take real actions on my Mac from one spoken sentence:
 
 ## Step 6 — Search tools in `server.py`
 
-- [ ] `list_places`, `search_notes`, `refine_search`, `more_results`, `open_result`
-- [ ] Good docstrings (they tell VoiceOS's AI when to use each tool)
-- [ ] Tested in MCP Inspector
+- [x] `list_places`, `search_notes`, `refine_search`, `more_results`, `open_result`
+- [x] Good docstrings (they tell VoiceOS's AI when to use each tool)
+- [x] Tested in MCP Inspector
 
 ## Step 6.5 — Connect to VoiceOS
 
