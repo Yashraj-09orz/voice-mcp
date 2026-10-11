@@ -163,3 +163,10 @@ def fetch_cards(ids:list) -> list:
         if id in by_id:
             ordered.append(by_id[id])
     return ordered
+def fetch_note(note_id:int)->dict|None:
+  sql = ("SELECT " + SELECT_COLS + ", n.updated_at, n.text_raw, n.text_refined "
+           "FROM notes n " + JOINS + " WHERE n.id = ?")
+  row = db.query_one(sql,(note_id,))
+  if row is None:
+      return None
+  return dict(row)
