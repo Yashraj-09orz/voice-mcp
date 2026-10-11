@@ -227,3 +227,18 @@ def next_page(search_id: int | None = None) -> str:
     set_shown(s["id"], start + len(page_ids))
     return format_cards(s["id"], len(s["ids"]), fetch_cards(page_ids), start + 1)
 
+#now after one search we got series of things suppose if we open certain thing with some number which is search["id"] we are extracting it out
+def open_result(number:int,search_id:int | None = None)-> str:
+    """OPEN NUMBER n: show the full note at position n of a saved search."""
+    s = load_search(search_id)
+    if s is None:
+        return "No previous search found. Try searching first."
+    total = len(s["ids"])
+    if number < 1 or number > total:
+        return "Choose a number from 1 to " + str(total) + "."
+    note = fetch_note(s["ids"][number-1])
+    if note is None:
+        return "That note no longer exists."
+    return format_note(note)
+
+
