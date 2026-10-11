@@ -214,7 +214,16 @@ def run_search(params:dict)->str:
     search_id = save_search(params, ids, len(first_page))
     return format_cards(search_id,len(ids),fetch_cards(first_page),1)
 
+#now moving to the very next page of it like when the user says more and more result then what we need to do 
+def next_page(search_id: int | None = None) -> str:
+    s = load_search(search_id)
+    if s is None:
+        return "No previous search found. Try searching first"
+    start = s["shown"]
+    page_ids = s["ids"][start:start + PAGE_SIZE]
+    if not page_ids:
+        return "That's all " + str(len(s["ids"])) + " results of search Q-" + str(s["id"]) + "."
 
-
-
+    set_shown(s["id"], start + len(page_ids))
+    return format_cards(s["id"], len(s["ids"]), fetch_cards(page_ids), start + 1)
 
