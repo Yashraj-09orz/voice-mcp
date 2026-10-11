@@ -171,7 +171,7 @@ def fetch_note(note_id:int)->dict|None:
       return None
   return dict(row)
 
-#returning to the host in readable format
+#returning to the host in readable format if more than one possible answer so it words with the fetch cards where many of them are given
 def format_cards(search_id: int,total: int,rows: list,first_number: int)->str:
     """Turn card rows into readable text, numbered from first_number."""
     last_number = first_number + len(rows)-1
@@ -184,3 +184,17 @@ def format_cards(search_id: int,total: int,rows: list,first_number: int)->str:
         lines.append('   "' + row["snippet"] + '"')
         number+=1
     return "\n".join(lines)
+
+#returning one note query not many using format note like getting from fetch note and returning to format note , so reading down the whole thing here instead of snippet
+def format_note(note :dict)->str:
+    """Turn one full note into readable text."""
+    date = note["created_at"][:16].replace("T"," ")
+    lines = []
+    lines.append(note["folder"] + " -> " + note["file"] + " -> " + note["heading"] + " . " + date)
+    if note["text_refined"]:
+        lines.append("Refine: " + note["text_refined"])
+    lines.append("Your words: " + note["text_raw"])
+    return "\n".join(lines)
+
+
+
