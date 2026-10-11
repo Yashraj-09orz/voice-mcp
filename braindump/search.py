@@ -196,5 +196,25 @@ def format_note(note :dict)->str:
     lines.append("Your words: " + note["text_raw"])
     return "\n".join(lines)
 
+#now using all the functoin to make the query and outputting the final string to our host
+#the main brain tht controls everything that we have we are given certain present information and then from this information we need to search it so we would not use the tools directly
+PAGE_SIZE = 5
+def run_search(params:dict)->str:
+    """NEW SEARCH: find notes, save the search, return text for HOST."""
+    rows = find_notes(params)
+    if not rows:
+        return "No notes found. Try different words, or fewer filters."
+    ids = []
+    for row in rows:
+        ids.append(row["id"])
+    if len(ids) == 1:
+        save_search(params,ids,1)
+        return format_note(fetch_note(ids[0]))
+    first_page = ids[:PAGE_SIZE]
+    search_id = save_search(params, ids, len(first_page))
+    return format_cards(search_id,len(ids),fetch_cards(first_page),1)
+
+
+
 
 
