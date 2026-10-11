@@ -50,15 +50,15 @@ take real actions on my Mac from one spoken sentence:
 
 - [x] Save a search (inputs + ranked list of note ids) in the `searches` table
 - [x] Load a search (by id, or the latest one)
-- [ ] "More" → next 5 from the saved list
-- [ ] "Open number n" → the n-th note id from the saved list
+- [x] "More" → next 5 from the saved list
+- [x] "Open number n" → the n-th note id from the saved list
 
 ## Step 5 — Search: results as text
 
-- [ ] Result cards: place (folder → file → heading), date, snippet
-- [ ] Full note fetch (raw + refined text)
-- [ ] "Obvious" rule: 1 match or a clear winner → open it directly
-- [ ] Facets when there are many matches (counts per folder / month)
+- [x] Result cards: place (folder → file → heading), date, snippet
+- [x] Full note fetch (raw + refined text)
+- [x] "Obvious" rule: 1 match or a clear winner → open it directly
+- [x] Facets when there are many matches (counts per folder / month)
 
 ## Step 6 — Search tools in `server.py`
 
