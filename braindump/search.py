@@ -170,3 +170,17 @@ def fetch_note(note_id:int)->dict|None:
   if row is None:
       return None
   return dict(row)
+
+#returning to the host in readable format
+def format_cards(search_id: int,total: int,rows: list,first_number: int)->str:
+    """Turn card rows into readable text, numbered from first_number."""
+    last_number = first_number + len(rows)-1
+    lines = []
+    lines.append("Search Q-" + str(search_id) + " . " + str(total) + " matches .  showing " + str(first_number) + "-" + str(last_number))
+    number = first_number
+    for row in rows:
+        date = row["created_at"][:16].replace("T"," ")
+        lines.append(str(number) + ". " + row["folder"] + " -> " + row["file"] + " -> " + row["heading"] + " . " + date) 
+        lines.append('   "' + row["snippet"] + '"')
+        number+=1
+    return "\n".join(lines)
